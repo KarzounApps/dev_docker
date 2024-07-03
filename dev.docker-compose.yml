@@ -1,0 +1,161 @@
+version: "3.7"
+
+volumes:
+   tiledesk-datadb:
+services:
+  dashboard:
+  #  image: tiledesk/tiledesk-dashboard
+   container_name: tiledesk-dashboard
+   build:
+      context: ./tiledesk-dashboard
+      dockerfile: dev.Dockerfile
+   environment:
+     - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
+     - BOT_CREDENTIAL_URL=/api/modules/dialogflow/botcredendials/
+     - RASA_BOT_CREDENTIAL_URL=/api/modules/rasa/botcredendials/
+     - "WIDGET_LOCATION=${EXTERNAL_BASE_URL:-https://tiledesk.octobots.ai}/widget/"
+     - SERVER_BASE_URL=https://tiledesk.octobots.ai/api/
+     - CHAT_BASE_URL=/chat/
+     - CDS_BASE_URL=/cds/
+     - WS_URL
+     - WS_URL_RELATIVE=/ws/
+     - BRAND_SRC
+     - REMOTE_JS_SRC
+     - CHAT21_ENGINE=mqtt
+     - UPLOAD_ENGINE=native
+     - PUSH_ENGINE=none
+     - LOG_LEVEL=debug
+     - APPS_URL=/api/modules/apps/
+     - PROMO_BANNER_URL
+     - FIREBASE_APIKEY
+     - FIREBASE_AUTHDOMAIN
+     - FIREBASE_DATABASEURL
+     - FIREBASE_PROJECT_ID
+     - FIREBASE_STORAGEBUCKET
+     - FIREBASE_MESSAGINGSENDERID
+     - FIREBASE_APP_ID
+     - FIREBASE_VAPID
+     - "API_BASEIMAGE_URL=${EXTERNAL_BASE_URL:-https://tiledesk.octobots.ai}/api/"
+     - COMMUNITY_TEMPLATES_URL=/api/modules/templates/public/community # need to check it @MK
+     - TEMPLATES_URL=/api/modules/templates/public/templates
+   ports:
+      # - "4500:80" #use expose if you want to block external access
+      - "4301:4301"
+   volumes:
+      - ./tiledesk-dashboard:/usr/src/app
+      - /usr/src/app/node_modules
+  cds:
+  #  image: tiledesk/design-studio:1.0.6
+  #  image: tiledesk/design-studio
+   container_name: tiledesk-cds
+
+   build:
+      context: ./design-studio
+      dockerfile: dev.Dockerfile
+   environment:
+      - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
+      - "WIDGET_LOCATION=${EXTERNAL_BASE_URL:-http://localhost:8081}/widget/"
+      - "SERVER_BASE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+      - DASHBOARD_URL=/dashboard/
+      - WS_URL
+      - WS_URL_RELATIVE=/ws/
+      - BRAND_SRC
+      - REMOTE_JS_SRC
+      - UPLOAD_ENGINE=native
+      - LOG_LEVEL=info
+      - FIREBASE_APIKEY
+      - FIREBASE_AUTHDOMAIN
+      - FIREBASE_DATABASEURL
+      - FIREBASE_PROJECT_ID
+      - FIREBASE_STORAGEBUCKET
+      - FIREBASE_MESSAGINGSENDERID
+      - FIREBASE_APP_ID
+      - FIREBASE_VAPID
+      - CDS_STORAGE_PREFIX=cds_sv5
+      - "API_BASEIMAGE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+   ports:
+      # - "4502:80" #use expose if you want to block external access
+      - "4305:4305"
+   volumes:
+      - ./design-studio:/app
+      - /app/node_modules
+  webwidget:
+  #  image: chat21/chat21-web-widget:latest
+   container_name: chat21-web-widget
+   build:
+      context: ./chat21-web-widget
+      dockerfile: dev.Dockerfile
+
+   ports:
+      # - "4200:80" # specify port forewarding
+        - "4303:4303"
+
+   environment:
+      - CHAT21_ENGINE=mqtt
+      - MQTT_APPID=tilechat
+      - PUSH_ENGINE=none
+      - LOG_LEVEL=info
+      - "MQTT_ENDPOINT=${EXTERNAL_MQTT_BASE_URL:-ws://localhost:8081}/mqws/ws"
+      - "MQTT_APIENDPOINT=${EXTERNAL_BASE_URL:-http://localhost:8081}/chatapi/api"
+      #- MQTT_LOGINSERVICE_ENDPOINT=/api/chat21/native/auth/createCustomToken
+      - FIREBASE_APIKEY
+      - FIREBASE_AUTHDOMAIN
+      - FIREBASE_DATABASEURL
+      - FIREBASE_PROJECT_ID
+      - FIREBASE_STORAGEBUCKET
+      - FIREBASE_MESSAGINGSENDERID
+      - FIREBASE_TENANT=tilechat
+      - UPLOAD_ENGINE=native
+      - "SERVER_BASE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+      - "TRANSLATIONS_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+      #- API_BASEIMAGE_URL=https://firebasestorage.googleapis.com/v0/b/    For firebase
+      - "API_BASEIMAGE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+      - DASHBOARD_URL=/dashboard/
+      - AUTH_PERSISTENCE=LOCAL
+      - ENBED_JS=true
+   volumes:
+      - ./chat21-web-widget:/ng_app
+      - /usr/src/app/node_modules
+  ionic:
+  #  image: chat21/chat21-ionic:latest
+   container_name: chat21-ionic
+   build:
+      context: ./chat21-ionic
+      dockerfile: dev.Dockerfile
+   ports:
+      # - "8082:80" #use expose if you want to block external access
+        - "4304:4304"
+
+   environment:
+      - DASHBOARD_URL=/dashboard/
+      - API_BASEIMAGE_URL=/api/
+      - "SERVER_BASE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+      - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
+      - WIDGET_LOCATION=/widget/
+      - PUSH_ENGINE=none
+      - LOG_LEVEL=info
+      - FILE_UPLOAD_ACCEPT=*/*
+      - CHAT21_ENGINE=mqtt
+      - MQTT_APPID=tilechat
+      - "MQTT_ENDPOINT=${EXTERNAL_MQTT_BASE_URL:-ws://localhost:8081}/mqws/ws"
+      - MQTT_APIENDPOINT=/chatapi/api
+      #- MQTT_LOGINSERVICE_ENDPOINT=/api/chat21/native/auth/createCustomToken
+      - UPLOAD_ENGINE=native
+      - FIREBASE_APIKEY=AIzaSyCMFvBnvpEoi8h5b7_5TDtoazdJvkRo9Rw
+      - FIREBASE_AUTHDOMAIN=octobots-428116.firebaseapp.com
+      - FIREBASE_DATABASEURL=/chat21-ionic/gLXnw2mGxtkjKVhWOR2D
+      - FIREBASE_PROJECT_ID=octobots-428116
+      - FIREBASE_STORAGEBUCKET=octobots-428116.appspot.com
+      - FIREBASE_MESSAGINGSENDERID=301660365096
+      - FIREBASE_TENANT=tilechat
+      - FIREBASE_VAPID
+      - SUPPORT_MODE=true
+      - WRITE_TO_BUTTON=true
+      - ARCHIVED_BUTTON=true
+      - AUTH_PERSISTENCE=LOCAL
+      - EMAIL_SECTION=true
+      - CHAT_STORAGE_PREFIX=chat_sv5
+      - WS_URL_RELATIVE=/ws/
+   volumes:
+      - ./chat21-ionic:/app
+      - /app/node_modules
