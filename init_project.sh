@@ -4,7 +4,7 @@
 repos=(
     #tiledesk
     # "https://github.com/Tiledesk/tiledesk.git"
-    "https://github.com/KarzounApps/dev_docker"
+    "https://github.com/KarzounApps/octobot-docker-dev.git"
     "https://github.com/KarzounApps/octobot-server.git"
     "https://github.com/KarzounApps/octobot-dashboard.git"
     "https://github.com/KarzounApps/octobot-llm.git"
