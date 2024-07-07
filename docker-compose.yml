@@ -79,36 +79,36 @@ services:
       - ./octobot-design-studio:/usr/src/app
       - /usr/src/app/node_modules
 
-  webwidget:
-#    image: chat21/chat21-web-widget
-    build:
-      context: ./octobot-chat21-web-widget
-    container_name: octobot-chat21-web-widget  
-    ports: 
-      - "4200:80" # specify port forewarding
-    environment: 
-      - CHAT21_ENGINE=mqtt
-      - MQTT_APPID=tilechat
-      - PUSH_ENGINE=none
-      - LOG_LEVEL=info
-      - "MQTT_ENDPOINT=${EXTERNAL_MQTT_BASE_URL:-ws://localhost:8081}/mqws/ws"
-      - "MQTT_APIENDPOINT=${EXTERNAL_BASE_URL:-http://localhost:8081}/chatapi/api"      
-      #- MQTT_LOGINSERVICE_ENDPOINT=/api/chat21/native/auth/createCustomToken      
-      - FIREBASE_APIKEY
-      - FIREBASE_AUTHDOMAIN
-      - FIREBASE_DATABASEURL
-      - FIREBASE_PROJECT_ID
-      - FIREBASE_STORAGEBUCKET
-      - FIREBASE_MESSAGINGSENDERID
-      - FIREBASE_TENANT=tilechat
-      - UPLOAD_ENGINE=native
-      - "SERVER_BASE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
-      - "TRANSLATIONS_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
-      #- API_BASEIMAGE_URL=https://firebasestorage.googleapis.com/v0/b/    For firebase
-      - "API_BASEIMAGE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"   
-      - DASHBOARD_URL=/dashboard/   
-      - AUTH_PERSISTENCE=LOCAL
-      - ENBED_JS=true
+#   webwidget:
+# #    image: chat21/chat21-web-widget
+#     build:
+#       context: ./octobot-chat21-web-widget
+#     container_name: octobot-chat21-web-widget  
+#     ports: 
+#       - "4200:80" # specify port forewarding
+#     environment: 
+#       - CHAT21_ENGINE=mqtt
+#       - MQTT_APPID=tilechat
+#       - PUSH_ENGINE=none
+#       - LOG_LEVEL=info
+#       - "MQTT_ENDPOINT=${EXTERNAL_MQTT_BASE_URL:-ws://localhost:8081}/mqws/ws"
+#       - "MQTT_APIENDPOINT=${EXTERNAL_BASE_URL:-http://localhost:8081}/chatapi/api"      
+#       #- MQTT_LOGINSERVICE_ENDPOINT=/api/chat21/native/auth/createCustomToken      
+#       - FIREBASE_APIKEY
+#       - FIREBASE_AUTHDOMAIN
+#       - FIREBASE_DATABASEURL
+#       - FIREBASE_PROJECT_ID
+#       - FIREBASE_STORAGEBUCKET
+#       - FIREBASE_MESSAGINGSENDERID
+#       - FIREBASE_TENANT=tilechat
+#       - UPLOAD_ENGINE=native
+#       - "SERVER_BASE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+#       - "TRANSLATIONS_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+#       #- API_BASEIMAGE_URL=https://firebasestorage.googleapis.com/v0/b/    For firebase
+#       - "API_BASEIMAGE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"   
+#       - DASHBOARD_URL=/dashboard/   
+#       - AUTH_PERSISTENCE=LOCAL
+#       - ENBED_JS=true
 
   ionic:
 #    image: chat21/chat21-ionic
@@ -207,8 +207,8 @@ services:
       - "8081:80" # specify port forewarding
     depends_on:
       - server
-      - dashboard
-      - webwidget
+      # - dashboard
+      # - webwidget
       - chat21httpserver
       - rabbitmq
     command: [nginx-debug, '-g', 'daemon off;']
