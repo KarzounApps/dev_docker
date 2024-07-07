@@ -75,9 +75,6 @@ else
     echo "docker-compose.yml not found in octobot repository"
 fi
 
-# Navigate to the octobot directory
-cd octobot || { echo "Directory 'octobot' not found"; exit 1; }
-
 # Run docker-compose up in detached mode
 docker-compose up -d
 
