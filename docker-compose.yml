@@ -201,8 +201,8 @@ services:
   proxy:
 #     image: tiledesk/tiledesk-docker-proxy
     build:
-      context: ./octobot-docker-proxy
-    container_name: octobot-docker-proxy   
+      context: ./octobot-nginx-proxy
+    container_name: octobot-nginx-proxy   
     ports:
       - "8081:80" # specify port forewarding
     depends_on:

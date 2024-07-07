@@ -12,7 +12,7 @@ repos=(
     "https://github.com/KarzounApps/octobot-chat21-ionic.git"
     "https://github.com/KarzounApps/octobot-chat21-ionic8"
     "https://github.com/KarzounApps/octobot-chat21-web-widget"
-    "https://github.com/KarzounApps/octobot-docker-proxy.git"
+    "https://github.com/KarzounApps/octobot-nginx-proxy.git"
     #chat21
     "https://github.com/KarzounApps/octobot-chat21-http-server.git"
     "https://github.com/KarzounApps/octobot-chat21-server.git"
