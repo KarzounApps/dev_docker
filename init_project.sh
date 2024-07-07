@@ -65,7 +65,7 @@ done
 
 
 
-docker_compose_src="dev_docker/docker-compose.yml"
+docker_compose_src="octobot-docker-dev/docker-compose.yml"
 docker_compose_dest="./docker-compose.yml"
 
 if [ -f "$docker_compose_src" ]; then
@@ -74,8 +74,7 @@ if [ -f "$docker_compose_src" ]; then
 else
     echo "docker-compose.yml not found in octobot repository"
 fi
-rm  -rf dev_docker
-#!/bin/bash
+rm  -rf octobot-docker-dev
 
 # Function to build Docker images
 build_images() {
