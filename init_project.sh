@@ -75,8 +75,73 @@ else
     echo "docker-compose.yml not found in octobot repository"
 fi
 rm  -rf dev_docker
-# Run docker-compose up in detached mode
+#!/bin/bash
+
+# Function to build Docker images
+build_images() {
+  echo "Building images..."
+
+  # Build octobot-dashboard
+  cd ./octobot-dashboard
+  docker build -t octobot-dashboard .
+  cd ..
+
+  # Build octobot-design-studio
+  cd ./octobot-design-studio
+  docker build -t octobot-cds .
+  cd ..
+
+  # Build octobot-chat21-ionic
+  cd ./octobot-chat21-ionic
+  docker build -t octobot-chat21-ionic .
+  cd ..
+
+  # Build octobot-chat21-ionic8
+  cd ./octobot-chat21-ionic8
+  docker build -t octobot-chat21-ionic8 .
+  cd ..
+
+  # Build octobot-nginx-proxy
+  cd ./octobot-nginx-proxy
+  docker build -t octobot-nginx-proxy .
+  cd ..
+
+  # Build octobot-server
+  cd ./octobot-server
+  docker build -t octobot-server .
+  cd ..
+
+  # Build octobot-chat21-http-server
+  cd ./octobot-chat21-http-server
+  docker build -t octobot-chat21-httpserver .
+  cd ..
+
+  # Build octobot-chat21-server
+  cd ./octobot-chat21-server
+  docker build -t octobot-chat21-server .
+  cd ..
+
+  # Build octobot-rabbitmq
+  cd ./octobot-chat21-rabbitmq
+  docker build -t octobot-rabbitmq .
+  cd ..
+
+  # Build octobot-llm
+  cd ./octobot-llm
+  docker build -t octobot-llm .
+  cd ..
+
+  echo "Images built successfully."
+}
+
+# Function to start Docker containers
+start_containers() {
+  echo "Starting containers..."
+
 docker-compose up -d
+  echo "Containers started successfully."
+}
 
-
-
+# Execute functions
+build_images
+start_containers
