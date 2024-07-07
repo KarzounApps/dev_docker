@@ -6,7 +6,7 @@ services:
   dashboard:
 #    image: tiledesk/tiledesk-dashboard
     build:
-      context: ./tiledesk-dashboard
+      context: ./octobot-dashboard
     container_name: octobot-dashboard 
     environment: 
       - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
@@ -42,14 +42,14 @@ services:
       # - "4500:80" #use expose if you want to block external access
       - "1001:1001"
     volumes:
-      - ./tiledesk-dashboard:/usr/src/app
+      - ./octobot-dashboard:/usr/src/app
       - /usr/src/app/node_modules
 
 
   cds:
 #    image: tiledesk/design-studio
     build:
-      context: ./design-studio
+      context: ./octobot-design-studio
     container_name: octobot-cds 
     environment: 
       - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
@@ -76,14 +76,14 @@ services:
       # - "4502:80" #use expose if you want to block external access
       - "1002:1002"
     volumes:
-      - ./design-studio:/usr/src/app
+      - ./octobot-design-studio:/usr/src/app
       - /usr/src/app/node_modules
 
   webwidget:
 #    image: chat21/chat21-web-widget
     build:
-      context: ./chat21-web-widget
-    container_name: chat21-octobot-web-widget  
+      context: ./octobot-chat21-web-widget
+    container_name: octobot-chat21-web-widget  
     ports: 
       - "4200:80" # specify port forewarding
     environment: 
@@ -113,15 +113,15 @@ services:
   ionic:
 #    image: chat21/chat21-ionic
     build:
-      context: ./chat21-ionic
-    container_name: chat21-octobot-ionic
+      context: ./octobot-chat21-ionic
+    container_name: octobot-chat21-ionic
     # ports:
     #   - "8082:80" #use expose if you want to block external access   
     ports:
       # - "4500:80" #use expose if you want to block external access
       - "1003:1003"
     volumes:
-      - ./chat21-ionic:/usr/src/app
+      - ./octobot-chat21-ionic:/usr/src/app
       - /usr/src/app/node_modules
 
     environment: 
@@ -157,15 +157,15 @@ services:
   ionic8:
 #    image: chat21/chat21-ionic
     build:
-      context: ./chat21-ionic8
-    container_name: chat21-octobot-ionic8
+      context: ./octobot-chat21-ionic8
+    container_name: octobot-chat21-ionic8
     # ports:
     #   - "8082:80" #use expose if you want to block external access   
     ports:
       # - "4500:80" #use expose if you want to block external access
       - "1004:1004"
     volumes:
-      - ./chat21-ionic8:/usr/src/app
+      - ./octobot-chat21-ionic8:/usr/src/app
       - /usr/src/app/node_modules
 
     environment: 
@@ -201,7 +201,7 @@ services:
   proxy:
 #     image: tiledesk/tiledesk-docker-proxy
     build:
-      context: ./tiledesk-docker-proxy
+      context: ./octobot-docker-proxy
     container_name: octobot-docker-proxy   
     ports:
       - "8081:80" # specify port forewarding
@@ -216,7 +216,7 @@ services:
   server:
 #     image: tiledesk/tiledesk-server
     build:
-      context: ./tiledesk-server
+      context: ./octobot-server
     container_name: octobot-server
     restart: always       
     environment: 
@@ -268,8 +268,8 @@ services:
   chat21httpserver:
 #     image: chat21/chat21-http-server
     build:
-      context: ./chat21-http-server
-    container_name: chat21-octobothttpserver
+      context: ./octobot-chat21-http-server
+    container_name: octobot-chat21-httpserver
     restart: always    
     environment: 
       - LOG_LEVEL=info
@@ -296,8 +296,8 @@ services:
   chat21server:
 #     image: chat21/chat21-server
     build:
-      context: ./chat21-server
-    container_name: chat21-octobotserver
+      context: ./octobot-chat21-server
+    container_name: octobot-chat21-server
     restart: always
     environment: 
       #- AUTO_RESTART=false
@@ -315,8 +315,8 @@ services:
   rabbitmq:
 #     image: chat21/chat21-rabbitmq
     build:
-      context: ./chat21-rabbitmq
-    container_name: rabbitmq
+      context: ./octobot-chat21-rabbitmq
+    container_name: octobot-rabbitmq
     environment:
         RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
         RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -332,7 +332,7 @@ services:
     #     timeout: 15s
     #     retries: 1
   mongo:
-    container_name: mongo
+    container_name: octobot-mongo
     image: mongo:4.0.23
     command: --bind_ip_all
     volumes:
@@ -352,8 +352,8 @@ services:
 
   tilellm:  #new
     build: 
-      context: ./tiledesk-llm
-    container_name: tilellm
+      context: ./octobot-llm
+    container_name: octobot-llm
     ports:
       - "8000:8000"
     environment:
