@@ -74,7 +74,7 @@ if [ -f "$docker_compose_src" ]; then
 else
     echo "docker-compose.yml not found in octobot repository"
 fi
-
+rm  -rf dev_docker
 # Run docker-compose up in detached mode
 docker-compose up -d
 
