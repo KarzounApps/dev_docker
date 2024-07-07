@@ -15,7 +15,7 @@ services:
       - "WIDGET_LOCATION=${EXTERNAL_BASE_URL:-http://localhost:8081}/widget/"
       - SERVER_BASE_URL=/api/
       - CHAT_BASE_URL=/chat/
-      - CHAT_BASE_URL=/chat2/
+      - CHAT_BASE_URL2=/chat2/
       - CDS_BASE_URL=/cds/
       - WS_URL
       - WS_URL_RELATIVE=/ws/
