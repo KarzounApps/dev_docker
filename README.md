@@ -77,6 +77,19 @@ To stop the running containers, use:
 
 ```docker-compose down```
 
+## Accessing the Dashboard
+
+Once the services are up and running, you can access the Octobot Dashboard at:
+
+[http://localhost:1001/]()
+
+Use the following credentials to log in:
+
+- Email: `admin@octobot.com`
+- Password: `superadmin`
+
+
+
 ## Troubleshooting
 
 - **Docker Compose Issues** : Ensure that Docker and Docker Compose are installed correctly and that you have sufficient permissions.
