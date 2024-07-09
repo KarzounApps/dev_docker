@@ -4,7 +4,7 @@ volumes:
    tiledesk-datadb:
 services:
   dashboard:
-   image: tiledesk/tiledesk-dashboard
+   image: octobots/octobot-dashboard
    container_name: tiledesk-dashboard 
    environment: 
       - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
@@ -39,8 +39,8 @@ services:
       - "4500:80" #use expose if you want to block external access
 
   cds:
-   image: tiledesk/design-studio:1.0.6
-   container_name: tiledesk-cds 
+   image: octobots/octobot-design-studio
+   container_name: octobot-design-studio 
    environment: 
       - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
       - "WIDGET_LOCATION=${EXTERNAL_BASE_URL:-http://localhost:8081}/widget/"
@@ -66,8 +66,8 @@ services:
       - "4502:80" #use expose if you want to block external access
 
   webwidget:
-   image: chat21/chat21-web-widget:latest
-   container_name: chat21-web-widget  
+   image: octobots/octobot-chat21-web-widget
+   container_name: octobot-chat21-web-widget  
    ports: 
       - "4200:80" # specify port forewarding
    environment: 
@@ -95,8 +95,8 @@ services:
       - ENBED_JS=true
 
   ionic:
-   image: chat21/chat21-ionic:latest
-   container_name: chat21-ionic
+   image: octobots/octobot-chat21-ionic
+   container_name: octobot-chat21-ionic
    ports:
       - "8082:80" #use expose if you want to block external access   
    environment: 
@@ -130,8 +130,8 @@ services:
       - CHAT_STORAGE_PREFIX=chat_sv5
       - WS_URL_RELATIVE=/ws/
   proxy:
-    image: tiledesk/tiledesk-docker-proxy
-    container_name: tiledesk-docker-proxy   
+    image: octobots/octobot-nginx-proxy
+    container_name: octobot-nginx-proxy   
     ports:
       - "8081:80" # specify port forewarding
     depends_on:
@@ -143,8 +143,8 @@ services:
     command: [nginx-debug, '-g', 'daemon off;']
     
   server:
-    image: tiledesk/tiledesk-server:latest
-    container_name: tiledesk-server
+    image: octobots/octobot-server
+    container_name: octobot-server
     restart: always       
     environment: 
       - LOG_LEVEL=info
@@ -192,7 +192,7 @@ services:
       - "3000:3000"
 
   chat21httpserver:
-    image: chat21/chat21-http-server:latest
+    image: octobots/octobot-chat21-http-server
     container_name: chat21httpserver
     restart: always    
     environment: 
@@ -218,8 +218,8 @@ services:
       - "8004:8004"
 
   chat21server:
-    image: chat21/chat21-server:latest
-    container_name: chat21server
+    image: octobots/octobot-chat21-server
+    container_name: octobot-chat21-server
     restart: always
     environment: 
       #- AUTO_RESTART=false
@@ -235,8 +235,8 @@ services:
       - rabbitmq
       - server 
   rabbitmq:
-    image: chat21/chat21-rabbitmq:latest
-    container_name: rabbitmq
+    image: octobots/octobot-chat21-rabbitmq
+    container_name: octobot-rabbitmq
     environment:
         RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
         RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -252,7 +252,7 @@ services:
     #     timeout: 15s
     #     retries: 1
   mongo:
-    container_name: mongo
+    container_name: octobot-mongo
     image: mongo:4.0.23
     command: --bind_ip_all
     volumes:
