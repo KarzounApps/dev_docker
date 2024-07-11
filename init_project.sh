@@ -18,7 +18,8 @@ repos=(
     "https://github.com/KarzounApps/octobot-chat21-server.git"
     "https://github.com/KarzounApps/octobot-chat21-rabbitmq.git"
 )
- keys=(
+
+keys=(
    "tiledesk/tiledesk-dashboard"
    "tiledesk/design-studio"
    "chat21/chat21-web-widget"
@@ -27,25 +28,23 @@ repos=(
    "chat21/chat21-ionic8"
    "tiledesk/tiledesk-server"
    "chat21/chat21-http-server"
-
    "chat21/chat21-server"
-
    "chat21/chat21-rabbitmq"
    "tiledesk/tiledesk-docker-proxy"
 )
+
 values=(
-"tiledesk-dashboard"
- "design-studio"
+   "tiledesk-dashboard"
+   "design-studio"
    "chat21-web-widget"
    "tiledesk-llm"
-    "chat21-ionic"
-    "chat21-ionic8"
+   "chat21-ionic"
+   "chat21-ionic8"
    "tiledesk-server"
    "chat21-http-server"
    "chat21-server"
    "chat21-rabbitmq"
-       "tiledesk-docker-proxy"
-
+   "tiledesk-docker-proxy"
 )
 
 # Directory to clone repositories into
@@ -57,13 +56,35 @@ mkdir -p "$clone_dir"
 # Change to the directory
 cd "$clone_dir" || exit
 
+# Function to clone a repository and check out the latest tag
+clone_latest_tag() {
+  repo_url=$1
+  repo_name=$(basename -s .git "$repo_url")
+
+  # Clone the repository without checking out files
+  git clone --no-checkout "$repo_url"
+
+  # Change to the repository directory
+  cd "$repo_name" || exit
+
+  # Fetch all tags
+  git fetch --tags
+
+  # Find the latest tag
+  latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+
+  # Checkout the latest tag
+  git checkout "$latest_tag"
+
+  # Return to the parent directory
+  cd ..
+}
+
 # Iterate over the array and clone each repository
 for repo in "${repos[@]}"; do
     echo "Cloning $repo..."
-    git clone "$repo"
+    clone_latest_tag "$repo"
 done
-
-
 
 docker_compose_src="octobot-docker-dev/docker-compose.yml"
 docker_compose_dest="./docker-compose.yml"
@@ -74,7 +95,9 @@ if [ -f "$docker_compose_src" ]; then
 else
     echo "docker-compose.yml not found in octobot repository"
 fi
-rm  -rf octobot-docker-dev
+
+rm -rf octobot-docker-dev
+cd ./octobot
 
 # Function to build Docker images
 build_images() {
@@ -136,8 +159,7 @@ build_images() {
 # Function to start Docker containers
 start_containers() {
   echo "Starting containers..."
-
-docker-compose up -d
+  docker-compose up -d
   echo "Containers started successfully."
 }
 
