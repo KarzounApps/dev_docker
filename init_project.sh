@@ -165,5 +165,6 @@ start_containers() {
 
 # Execute functions
 # Execute functions
+# Execute functions
 build_images
 start_containers
