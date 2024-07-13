@@ -129,6 +129,41 @@ services:
       - EMAIL_SECTION=true
       - CHAT_STORAGE_PREFIX=chat_sv5
       - WS_URL_RELATIVE=/ws/
+  ionic8:
+   image: octobots/octobot-chat21-ionic8
+   container_name: octobot-chat21-ionic8
+   ports:
+      - "8083:80" #use expose if you want to block external access   
+   environment: 
+      - DASHBOARD_URL=/dashboard/      
+      - API_BASEIMAGE_URL=/api/
+      - "SERVER_BASE_URL=${EXTERNAL_BASE_URL:-http://localhost:8081}/api/"
+      - FEATURES_TOKEN=PAY:F-ANA:F-ACT:F-TRI:T-GRO:F-DEP:F-OPH:F-MTL:T-CAR:F-V1L:T-PSA:F-MTT:T-SUP:T-LBS:T-APP:T-DEV:F-NOT:T-IPS:F-ETK:F-RAS:T-PPB:F-PET:F-MTS:F-TIL:T-DGF:T-NAT:T-HPB:F-TOW:T-KNB:F-BAN:F-AST:F-MON:F-CNT:F-AUT:F-WUN:F
+      - WIDGET_LOCATION=/widget/
+      - PUSH_ENGINE=none
+      - LOG_LEVEL=info
+      - FILE_UPLOAD_ACCEPT=*/*
+      - CHAT21_ENGINE=mqtt
+      - MQTT_APPID=tilechat
+      - "MQTT_ENDPOINT=${EXTERNAL_MQTT_BASE_URL:-ws://localhost:8081}/mqws/ws"
+      - MQTT_APIENDPOINT=/chatapi/api
+      #- MQTT_LOGINSERVICE_ENDPOINT=/api/chat21/native/auth/createCustomToken
+      - UPLOAD_ENGINE=native
+      - FIREBASE_APIKEY
+      - FIREBASE_AUTHDOMAIN
+      - FIREBASE_DATABASEURL
+      - FIREBASE_PROJECT_ID
+      - FIREBASE_STORAGEBUCKET
+      - FIREBASE_MESSAGINGSENDERID
+      - FIREBASE_TENANT=tilechat
+      - FIREBASE_VAPID
+      - SUPPORT_MODE=true
+      - WRITE_TO_BUTTON=true
+      - ARCHIVED_BUTTON=true
+      - AUTH_PERSISTENCE=LOCAL
+      - EMAIL_SECTION=true
+      - CHAT_STORAGE_PREFIX=chat_sv5
+      - WS_URL_RELATIVE=/ws/
   proxy:
     image: octobots/octobot-nginx-proxy
     container_name: octobot-nginx-proxy   

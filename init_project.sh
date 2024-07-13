@@ -62,7 +62,7 @@ clone_latest_tag() {
   repo_name=$(basename -s .git "$repo_url")
 
   # Clone the repository without checking out files
-  git clone --no-checkout "$repo_url"
+  git clone --depth 1 --no-checkout "$repo_url"
 
   # Change to the repository directory
   cd "$repo_name" || exit
