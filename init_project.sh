@@ -60,31 +60,41 @@ cd "$clone_dir" || exit
 clone_latest_tag() {
   repo_url=$1
   repo_name=$(basename -s .git "$repo_url")
+  echo $repo_name
 
-  # Clone the repository without checking out files
-  git clone --depth 1 --no-checkout "$repo_url"
+  # # Clone the repository without checking out files
+  # git clone --depth 1 --no-checkout "$repo_url"
 
-  # Change to the repository directory
-  cd "$repo_name" || exit
+  # # Change to the repository directory
+  # cd "$repo_name" || exit
 
-  # Fetch all tags
-  git fetch --tags
+  # # Fetch all tags
+  # git fetch --tags
 
-  # Find the latest tag
-  latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+  # # Find the latest tag
+  # latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
 
   # Checkout the latest tag
-  git checkout "$latest_tag"
+  # git checkout "$latest_tag"
+  # git checkout "$repo_name"
+  git clone $repo_name
 
   # Return to the parent directory
   cd ..
 }
 
 # Iterate over the array and clone each repository
+# for repo in "${repos[@]}"; do
+#     echo "Cloning $repo..."
+#     clone_latest_tag "$repo"
+# done
+
 for repo in "${repos[@]}"; do
     echo "Cloning $repo..."
-    clone_latest_tag "$repo"
+    git clone "$repo"
 done
+
+
 
 docker_compose_src="octobot-docker-dev/docker-compose.yml"
 docker_compose_dest="./docker-compose.yml"

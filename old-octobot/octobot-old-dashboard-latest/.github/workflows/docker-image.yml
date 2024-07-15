@@ -1,0 +1,77 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["main"]
+    tags:
+      - "v*.*.*"
+      - "latest"
+
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Build and tag the Docker image
+        id: build-image
+        run: |
+          # Extract repository name and remove the "KarzounApps/" prefix
+          FULL_REPO_NAME=${{ github.repository }}
+          REPO_NAME=${FULL_REPO_NAME#KarzounApps/}
+
+          # Default image tag with current timestamp
+          IMAGE_TAG=octobots/${REPO_NAME}:$(date +%s)
+
+          # Check if the current commit has a tag
+          TAG=$(git tag --points-at HEAD)
+
+          if [[ -n "$TAG" ]]; then
+            IMAGE_TAG=octobots/${REPO_NAME}:$TAG
+          fi
+
+          # Save the image name to the environment
+               echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
+          # Build the Docker image
+          docker build . --file Dockerfile.prod --tag $IMAGE_TAG
+      - name: Push the Docker image
+        run: docker push ${{ env.IMAGE_TAG }}
+  pull_latest_image_on_server:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Extract the image Name
+        id: image-name
+        run: |
+          # Extract repository name and remove the "KarzounApps/" prefix
+          FULL_REPO_NAME=${{ github.repository }}
+          REPO_NAME=${FULL_REPO_NAME#KarzounApps/}
+
+          # get repo image name
+          IMAGE_NAME=octobots/${REPO_NAME}
+          SERVICE_NAME=dashboard
+          # Save the image tag to the environment
+           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+           echo "SERVICE_NAME=$SERVICE_NAME" >> $GITHUB_ENV
+      - name: Transfer to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            # Run your remote commands here run
+            cd /www/wwwroot/tiledesk.octobots.ai
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            docker compose down  ${{ env.SERVICE_NAME }}
+            docker rmi -f  ${{ env.IMAGE_NAME }}
+            docker compose up -d  ${{ env.SERVICE_NAME }}

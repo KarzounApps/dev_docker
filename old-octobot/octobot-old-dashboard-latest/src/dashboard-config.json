@@ -1,0 +1,42 @@
+{
+  "t2y12PruGU9wUtEGzBJfolMIgK": "${FEATURES_TOKEN}",
+  "WIDGET_BASE_URL": "${WIDGET_LOCATION}",
+  "botcredendialsURL": "http://localhost:3000/api/modules/dialogflow/botcredendials/",
+  "rasaBotCredentialsURL": "http://localhost:3000/api/modules/rasa/botcredendials/",
+
+
+
+
+  "SERVER_BASE_URL": "http://localhost:3000/",
+  "CHAT_BASE_URL": "http://localhost:1003/",
+  "CHAT_BASE_URL2": "http://localhost:1004/",
+  "wsUrl": "ws://localhost:3000/",
+  "wsUrlRel": "/ws/",
+  "brandSrc": "",
+  "globalRemoteJSSrc":"",
+  "chatEngine": "mqtt",
+  "firebaseAuth": "${FIREBASE_AUTH}",
+  "uploadEngine": "native",
+  "pushEngine": "none",
+  "baseImageUrl": "http://localhost:3000/api/",
+  "logLevel": "info",
+  "communityTemplatesUrl": "http://localhost:3000/api/modules/templates/public/community",
+  "templatesUrl": "http://localhost:3000/api/modules/templates/public/templates",
+  "appsUrl":  "http://localhost:3000/api/modules/apps/",
+  "cdsBaseUrl": "http://localhost:1002/",
+  "promoBannerUrl": "${PROMO_BANNER_URL}",
+  "whatsappApiUrl": "${WHATSAPP_API_URL}",
+  "tiledeskPhoneNumber": "${TILEDESK_PHONE_NUMBER}",
+  "ticketingEmail": "${TICKETING_EMAIL}", 
+  "aiModels":"${AI_MODELS}",
+  "firebase": {
+      "apiKey": "${FIREBASE_APIKEY}",
+      "authDomain": "${FIREBASE_AUTHDOMAIN}",
+      "databaseURL": "${FIREBASE_DATABASEURL}",
+      "projectId": "${FIREBASE_PROJECT_ID}",
+      "storageBucket": "${FIREBASE_STORAGEBUCKET}",
+      "messagingSenderId": "${FIREBASE_MESSAGINGSENDERID}",
+      "appId": "${FIREBASE_APP_ID}",
+      "vapidKey": "${FIREBASE_VAPID}"
+  }
+}
