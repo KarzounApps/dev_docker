@@ -19,34 +19,6 @@ repos=(
     "https://github.com/KarzounApps/octobot-chat21-rabbitmq.git"
 )
 
-keys=(
-   "tiledesk/tiledesk-dashboard"
-   "tiledesk/design-studio"
-   "chat21/chat21-web-widget"
-   "tiledesk/tiledesk-llm"
-   "chat21/chat21-ionic"
-   "chat21/chat21-ionic8"
-   "tiledesk/tiledesk-server"
-   "chat21/chat21-http-server"
-   "chat21/chat21-server"
-   "chat21/chat21-rabbitmq"
-   "tiledesk/tiledesk-docker-proxy"
-)
-
-values=(
-   "tiledesk-dashboard"
-   "design-studio"
-   "chat21-web-widget"
-   "tiledesk-llm"
-   "chat21-ionic"
-   "chat21-ionic8"
-   "tiledesk-server"
-   "chat21-http-server"
-   "chat21-server"
-   "chat21-rabbitmq"
-   "tiledesk-docker-proxy"
-)
-
 # Directory to clone repositories into
 clone_dir="octobot"
 
@@ -56,48 +28,33 @@ mkdir -p "$clone_dir"
 # Change to the directory
 cd "$clone_dir" || exit
 
-# Function to clone a repository and check out the latest tag
-clone_latest_tag() {
+# Function to clone a repository and check out the main branch
+clone_main_branch() {
   repo_url=$1
   repo_name=$(basename -s .git "$repo_url")
-  echo $repo_name
 
-  # # Clone the repository without checking out files
-  # git clone --depth 1 --no-checkout "$repo_url"
+  # Clone the repository
+  git clone "$repo_url"
 
-  # # Change to the repository directory
-  # cd "$repo_name" || exit
+  # Change to the repository directory
+  cd "$repo_name" || exit
 
-  # # Fetch all tags
-  # git fetch --tags
-
-  # # Find the latest tag
-  # latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
-
-  # Checkout the latest tag
-  # git checkout "$latest_tag"
-  # git checkout "$repo_name"
-  git clone $repo_name
+  # Checkout the main branch
+  git checkout main
 
   # Return to the parent directory
   cd ..
 }
 
 # Iterate over the array and clone each repository
-# for repo in "${repos[@]}"; do
-#     echo "Cloning $repo..."
-#     clone_latest_tag "$repo"
-# done
-
 for repo in "${repos[@]}"; do
     echo "Cloning $repo..."
-    git clone "$repo"
+    clone_main_branch "$repo"
 done
 
-
-
+# Copy the docker-compose.yml file
 docker_compose_src="octobot-docker-dev/docker-compose.yml"
-docker_compose_dest="./docker-compose.yml"
+docker_compose_dest="../docker-compose.yml"
 
 if [ -f "$docker_compose_src" ]; then
     cp "$docker_compose_src" "$docker_compose_dest"
@@ -106,62 +63,65 @@ else
     echo "docker-compose.yml not found in octobot repository"
 fi
 
+# Remove the octobot-docker-dev directory
 rm -rf octobot-docker-dev
-cd ./octobot
+
+# Change to the parent directory
+cd ..
 
 # Function to build Docker images
 build_images() {
   echo "Building images..."
 
   # Build octobot-dashboard
-  cd ./octobot-dashboard
+  cd ./octobot/octobot-dashboard
   docker build -t octobot-dashboard .
-  cd ..
+  cd ../..
 
   # Build octobot-design-studio
-  cd ./octobot-design-studio
+  cd ./octobot/octobot-design-studio
   docker build -t octobot-cds .
-  cd ..
+  cd ../..
 
   # Build octobot-chat21-ionic
-  cd ./octobot-chat21-ionic
+  cd ./octobot/octobot-chat21-ionic
   docker build -t octobot-chat21-ionic .
-  cd ..
+  cd ../..
 
   # Build octobot-chat21-ionic8
-  cd ./octobot-chat21-ionic8
+  cd ./octobot/octobot-chat21-ionic8
   docker build -t octobot-chat21-ionic8 .
-  cd ..
+  cd ../..
 
   # Build octobot-nginx-proxy
-  cd ./octobot-nginx-proxy
+  cd ./octobot/octobot-nginx-proxy
   docker build -t octobot-nginx-proxy .
-  cd ..
+  cd ../..
 
   # Build octobot-server
-  cd ./octobot-server
+  cd ./octobot/octobot-server
   docker build -t octobot-server .
-  cd ..
+  cd ../..
 
   # Build octobot-chat21-http-server
-  cd ./octobot-chat21-http-server
+  cd ./octobot/octobot-chat21-http-server
   docker build -t octobot-chat21-httpserver .
-  cd ..
+  cd ../..
 
   # Build octobot-chat21-server
-  cd ./octobot-chat21-server
+  cd ./octobot/octobot-chat21-server
   docker build -t octobot-chat21-server .
-  cd ..
+  cd ../..
 
   # Build octobot-rabbitmq
-  cd ./octobot-chat21-rabbitmq
+  cd ./octobot/octobot-chat21-rabbitmq
   docker build -t octobot-rabbitmq .
-  cd ..
+  cd ../..
 
   # Build octobot-llm
-  cd ./octobot-llm
+  cd ./octobot/octobot-llm
   docker build -t octobot-llm .
-  cd ..
+  cd ../..
 
   echo "Images built successfully."
 }
@@ -173,8 +133,6 @@ start_containers() {
   echo "Containers started successfully."
 }
 
-# Execute functions
-# Execute functions
 # Execute functions
 build_images
 start_containers
